@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-start mt-3">
+    <div class="offset-xl-1 col-sm-2">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-6">
+                {{ form.m1|as_crispy_field }}
+              </div>
+              <div class="col-6">
+                {{ form.m2|as_crispy_field }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                {{ form.a1|as_crispy_field }}
+              </div>
+              <div class="col-6">
+                {{ form.a2|as_crispy_field }}
+              </div>
+            </div>
+            {{ form.m|as_crispy_field }}
+
+            <button type="submit" class="btn btn-success">Начать</button>
+        </form>
+    </div>
+    <div class="col-sm-8 text-center">
+        {{ result }}
+         <div class="row">
+             <div class="offset-xl-1 font-weight-bold text-left">
+                 m₁ = {% if m1 %} {{ m1 }} {% endif %} <br>
+                 m₂ = {% if m2 %} {{ m2 }} {% endif %} <br>
+                 a₁ = {% if a1 %} {{ a1 }} {% endif %} <br>
+                 a₂ = {% if a2 %} {{ a2 }} {% endif %} <br>
+                 m  = {% if m %} {{ m }} {% endif %} <br>
+             </div>
+         </div>
+    </div>
+<!--    если надо добавить фото, то нужно залить фото в static/img/example.jpg -->
+<!--    <img class="w-50 mx-auto d-block" src="{% static 'img/example.jpg' %}" alt="photo">-->
+</div>
+
+<!--скрипт для этой странице пишем в index.js-->
+<script src="{% static 'js/index.js' %}"></script>
+
+{% endblock %}
