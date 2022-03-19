@@ -6,7 +6,7 @@
 {% block content %}
 <div class="row justify-content-start mt-3">
     <div class="offset-xl-1 col-sm-3">
-        <form method="post">
+        <form method="post" id="myform">
             {% csrf_token %}
             <div class="row">
               <div class="col-4">
@@ -32,18 +32,10 @@
 
             <button type="submit" class="btn btn-success">Начать</button>
         </form>
+
     </div>
     <div class="col-sm-8 text-center">
          <div class="row">
-             <div class="offset-xl-1 font-weight-bold text-left">
-                 m₁ = {% if m1 %} <span id="m1"> {{ m1 }} </span> {% endif %} <br>
-                 m₂ = {% if m2 %} <span id="m2"> {{ m2 }} </span> {% endif %} <br>
-                 m  = {% if m %} <span id="m"> {{ m }} </span> {% endif %} <br>
-                 T₁ = {% if T1 %} <span id="T1"> {{ T1 }} </span> {% endif %} <br>
-                 T₂ = {% if T2 %} <span id="T2"> {{ T2 }} </span> {% endif %} <br>
-                 S = {% if S_table %} <span id="S_table"> {{ S_table }} </span> {% endif %} <br>
-             </div>
-            <div class="col-8">
                 {{ result }}
             </div>
          </div>

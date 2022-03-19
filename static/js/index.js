@@ -1,1 +1,1 @@
-console.log('RABOTAET ^_^')
+console.log('aasa');
