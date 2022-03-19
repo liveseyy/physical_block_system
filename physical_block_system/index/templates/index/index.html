@@ -27,19 +27,43 @@
                 {{ form.T2|as_crispy_field }}
               </div>
             </div>
-            {{ form.S_table|as_crispy_field }}
 
+            {{ form.t|as_crispy_field }}
 
             <button type="submit" class="btn btn-success">Начать</button>
         </form>
 
     </div>
-    <div class="col-sm-8 text-center">
+    <div class="offset-xl-2 offset-sm-2  col-sm-6 text-center">
          <div class="row">
-                {{ result }}
-            </div>
-         </div>
+            {{ result_text }}
+        </div>
     </div>
+    </div>
+
+    {# потом  visibility: hidden  v#}
+    <div style="">
+         result_text = <span id="result_text"> {{ result_text }} </span><br><br>
+         m₁ = <span id="m1"> {{ m1 }} </span><br>
+         m₂ = <span id="m2"> {{ m2 }} </span><br>
+         m  = <span id="m"> {{ m }} </span><br><br>
+
+         x  = <span id="x"> {{ x }} </span><br>
+         y  = <span id="y"> {{ y }} </span><br>
+         x1  = <span id="x1"> {{ x1 }} </span><br>
+         y1  = <span id="y1"> {{ y1 }} </span><br>
+         x2  = <span id="x2"> {{ x2 }} </span><br>
+         y2  =<span id="y2"> {{ y2 }} </span><br><br>
+
+         t1 = <span id="t1"> {{ t1 }} </span><br>
+         t2 = <span id="t2"> {{ t2 }} </span><br>
+         t3 = <span id="t3"> {{ t3 }} </span><br>
+         t = <span id="t"> {{ t }} </span><br><br>
+
+         a1 = <span id="a1"> {{ a1 }} </span><br>
+         a2 = <span id="a2"> {{ a2 }} </span><br>
+         a3 = <span id="a3"> {{ a3 }} </span><br>
+     </div>
 <!--    если надо добавить фото, то нужно залить фото в static/img/example.jpg -->
 <!--    <img class="w-50 mx-auto d-block" src="{% static 'img/example.jpg' %}" alt="photo">-->
 </div>

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .forms import PhysicalObjectiveForm
+from .utils import caclculate_blocks
 
 
 def index(request):
@@ -10,10 +11,9 @@ def index(request):
         # В data словарь приходит с формы, уже можно обрабатывать
         # при отправке форм можно видеть в терминале print
         if objective_form.is_valid():
-            context['result'] = 'Получается что-то что-то'
-            print(objective_form.cleaned_data)
-            # for field in objective_form.fields.keys():
-            #     context[field] = getattr(objective_form, field)
+            result = caclculate_blocks(objective_form.cleaned_data)
+            for key, value in result.items():
+                context[key] = value
         else:
-            context['result'] = 'Не валидные данные'
+            context['result_text'] = 'Не валидные данные'
     return render(request, 'index/index.html', context)
