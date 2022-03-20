@@ -31,8 +31,6 @@ def caclculate_blocks(cleaned_date: dict):
     m = cleaned_date.get('m')
     m1 = cleaned_date.get('m1')
     m2 = cleaned_date.get('m2')
-    T1 = cleaned_date.get('T1')
-    T2 = cleaned_date.get('T2')
     t = cleaned_date.get('t')
     t1 = None
     t2 = None
@@ -43,7 +41,6 @@ def caclculate_blocks(cleaned_date: dict):
         # для простоты расчётов считаем что второе тело (справа) тяжелее
         # потом для фронта зеркалим координаты как должно быть
         m2, m1 = m1, m2
-        T2, T1 = T1, T2
         reversed_masses = True
 
     # 1 страница решения
@@ -87,13 +84,6 @@ def caclculate_blocks(cleaned_date: dict):
             result_text = 'Меньшее тело остановится до блока'
         else:
             # После истечения t1
-            x1 = 0
-            y1 = 0
-            x2 = S_TABLE
-            y2 = S_TABLE - 2 * l - l2 - l1
-            x = l1 + l
-            y = 0
-
             # 3 страница решения
             a2 = (m2 * g - k * g * (m1 + m)) / (m + m1 + m2)
             t2 = _calculate_t2(S_TABLE=S_TABLE, l1=l1, l=l, a1=a1, a2=a2, t1=t1)
@@ -113,12 +103,6 @@ def caclculate_blocks(cleaned_date: dict):
             else:
                 # После истечения t2
                 # 5 страница решения
-                y1 = 0
-                x1 = S_TABLE - l1 - l
-                y2 = -l2 - l
-                x2 = S_TABLE
-                y = 0
-                x = S_TABLE
                 a3 = g * (m2 + m - k * m2) / (m1+m2+m)
 
                 t3 = _calculate_t3(l1=l1, l=l, a1=a1, a2=a2, a3=a3, t1=t1, t2=t2)
@@ -143,7 +127,6 @@ def caclculate_blocks(cleaned_date: dict):
 
     if reversed_masses:
         m1, m2 = m2, m1
-        T1, T2 = T2, T1
         y1, y2 = y2, y1
         x1, x2 = x2, x1
         x = 60 - x

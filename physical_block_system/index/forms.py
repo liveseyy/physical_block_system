@@ -7,9 +7,6 @@ class PhysicalObjectiveForm(forms.Form):
     m2 = forms.FloatField(label='m₂')
     m = forms.FloatField(label='m, центр')
 
-    T1 = forms.FloatField(label='T₁')
-    T2 = forms.FloatField(label='T₂')
-
     t = forms.FloatField(label='Время')
 
     def clean(self):
