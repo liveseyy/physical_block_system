@@ -51,7 +51,7 @@ def caclculate_blocks(cleaned_date: dict):
     x0_2 = S_TABLE
     y0_2 = -1 * (l2 - S_TABLE / 2 + l)
 
-    a1 = (g * (m2 - m1 - k * m)) / (m + m2 + m1)
+    a1 = g * (m2 - m1 - k * m) / (m + m2 + m1)
     a2 = None
     a3 = None
     a4 = None
@@ -70,7 +70,7 @@ def caclculate_blocks(cleaned_date: dict):
     # TODO: if l1 + l < S_TABLE, добавить возможность задавать длины нитей, стола и т.д.
     if True:
         # легкое тело окажется в (0, 0) через
-        t1 = math.sqrt(2 * (l1 - S_TABLE / 2 + l) / abs(a1))
+        t1 = math.sqrt(2 * (l1 - S_TABLE / 2 + l) / a1)
         # До истечения t1
         if t <= t1:
             # тело проедет не t1 секунд, а за остаток от заданого t
