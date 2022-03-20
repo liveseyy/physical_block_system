@@ -21,4 +21,5 @@ let t3 = document.querySelector("#t3").textContent;
 let a1 = document.querySelector("#a1").textContent;
 let a2 = document.querySelector("#a2").textContent;
 let a3 = document.querySelector("#a3").textContent;
+let a4 = document.querySelector("#a4").textContent;
 

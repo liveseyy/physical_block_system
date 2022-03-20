@@ -118,8 +118,8 @@ def caclculate_blocks(cleaned_date: dict):
                     x = S_TABLE
                     result_text = 'Одно тело останется на столе, двое повиснут'
                 else:
-                    # все тела летят вниз
-                    a4 = g * (m2 + m - k * m2) / (m1 + m2 + m)
+                    # все тела летят вниз, a4 = g = 9,8
+                    a4 = g * (m + m1 + m2) / (m + m1 + m2)
 
                     y1 = 0
                     x1 = S_TABLE
@@ -147,6 +147,7 @@ def caclculate_blocks(cleaned_date: dict):
         'a1': a1,
         'a2': a2,
         'a3': a3,
+        'a4': a4,
         't1': t1,
         't2': t2,
         't3': t3,
