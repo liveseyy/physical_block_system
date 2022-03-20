@@ -54,6 +54,7 @@ def caclculate_blocks(cleaned_date: dict):
     a1 = (g * (m2 - m1 - k * m)) / (m + m2 + m1)
     a2 = None
     a3 = None
+    a4 = None
     if a1 < 0 or m2 == m1:
         return {
             'result_text': "В начальном положении",
@@ -103,7 +104,7 @@ def caclculate_blocks(cleaned_date: dict):
             else:
                 # После истечения t2
                 # 5 страница решения
-                a3 = g * (m2 + m - k * m2) / (m1+m2+m)
+                a3 = g * (m2 + m - k * m1) / (m1+m2+m)
 
                 t3 = _calculate_t3(l1=l1, l=l, a1=a1, a2=a2, a3=a3, t1=t1, t2=t2)
                 if t - t1 - t2 - t3 < 0:
@@ -117,6 +118,9 @@ def caclculate_blocks(cleaned_date: dict):
                     x = S_TABLE
                     result_text = 'Одно тело останется на столе, двое повиснут'
                 else:
+                    # все тела летят вниз
+                    a4 = g * (m2 + m - k * m2) / (m1 + m2 + m)
+
                     y1 = 0
                     x1 = S_TABLE
                     y2 = -l2 - l1 - S_TABLE
