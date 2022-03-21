@@ -1,3 +1,11 @@
 .test-class {
     background-color: #d4e7cd;
 }
+
+.canvas {
+    display: block;
+    position: absolute;
+    right: 400px;
+    bottom: 200px;
+    background-color: #fff;
+}
