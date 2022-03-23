@@ -98,83 +98,169 @@ function getDir() {
 }
 
 function getPhase() {
+    if (a4) {
+        return 4;
+    }
     if (a3 && t3) {
         return 3;
     }
-    if (a2 && t2 && !a3 & !t3) {
+    if (a2 && t2) {
         return 2;
     }
     if (a1 && t1) {
         return 1;
     }
+    if (!t1) {
+        return 0;
+    }
 }
 
 function getSpeed() {
     if(getPhase() === 3) {
-        const v3 = Math.floor((data.right.y0 - data.main.checkP1) / (a3 * t3)) * 8;
+        const v3 = Math.floor((a3 * t3) * 3);
         return v3;
     }
+    if(getPhase() === 4) {
+        const v4 = Math.floor(a4 * 2.25);
+        return v4;
+    }
+    if(getPhase() === 2) {
+        const v2 = Math.floor((a2 * t2) * 80);
+        return v2;
+    }
+    if(getPhase() === 1) {
+        const v1 = Math.floor((a1 * t1) / 0.3);
+        return v1;
+    }
+    if(getPhase() === 0) {
+        return 0;
+    }
+}
+
+function moveRight() {
+    if (data.main.y0 > data.main.checkP1) {
+        ctx.clearRect(data.left.x0, data.main.y0, data.left.width, data.left.height);
+        ctx.clearRect(data.mid.x0, data.mid.y0, data.mid.width, data.mid.height);
+        ctx.clearRect(data.right.x0, data.right.y0, data.right.width, data.right.height);
+
+        data.main.y0 -= 1;
+        data.left.y0 -= 1;
+
+        // Движение центрального блока
+        if (data.mid.x0 >= data.main.checkP2) {
+            data.mid.y0 += 1;
+
+            ctx.fillRect(data.mid.x0, data.mid.y0, data.mid.height, data.mid.width);
+        } else {
+            data.mid.x0 += 1;
+
+            ctx.fillRect(data.mid.x0, data.mid.y0, data.mid.width, data.mid.height);
+        }
+        // Движение правого блока
+        data.right.y0 += 1;
+        ctx.fillRect(data.right.x0, data.right.y0, data.right.width, data.right.height);
+
+        ctx.fillRect(data.left.x0, data.main.y0, data.left.width, data.left.height);
+    }
+    // Центральная часть стола
+    if (data.main.y0 === data.main.checkP1 && data.main.x0 < data.main.checkP2) {
+        ctx.clearRect(data.left.x0, data.left.y0, data.left.height, data.left.width);
+        ctx.clearRect(data.mid.x0, data.mid.y0, data.mid.width, data.mid.height);
+
+        if (data.left.y0 !== data.main.checkP1 - 5) {
+            data.left.y0 -= 5; // Костыль, чтобы нормально стиралась нить
+        }
+
+        data.main.x0 += 1;
+        data.left.x0 += 1;
+
+        // Движение центрального блока
+        if (data.mid.x0 >= data.main.checkP2) {
+            data.mid.y0 += 1;
+
+            ctx.fillRect(data.mid.x0, data.mid.y0, data.mid.height, data.mid.width);
+        } else {
+            data.mid.x0 += 1;
+
+            ctx.fillRect(data.mid.x0, data.mid.y0, data.mid.width, data.mid.height);
+        }
+
+        ctx.fillRect(data.left.x0, data.left.y0, data.left.height, data.left.width);
+    }
+    drawLine(data.main.x0, data.main.y0, data.main.checkP1, data.main.checkP2, data.right.y0);
+}
+
+function moveLeft() {
+    if(data.main.finish > data.main.checkP1) {
+        ctx.clearRect(data.right.x0, data.right.y0, data.right.width, data.right.height);
+        ctx.clearRect(data.mid.x0, data.mid.y0, data.mid.width, data.mid.height);
+        ctx.clearRect(data.left.x0, data.left.y0, data.left.width, data.left.height);
+
+        data.main.finish -= 1;
+        data.right.y0 -= 1;
+
+        // Движение центрального блока
+        if(data.mid.x0 < data.main.x0) {
+            data.mid.y0 += 1
+
+            ctx.fillRect(data.mid.x0, data.mid.y0, data.mid.height, data.mid.width)
+        } else {
+            data.mid.x0 -= 1;
+
+            ctx.fillRect(data.mid.x0, data.mid.y0, data.mid.width, data.mid.height);
+        }
+        //Движение левого блока
+        data.left.y0 += 1;
+        ctx.fillRect(data.left.x0, data.left.y0, data.left.width, data.left.height);
+
+        ctx.fillRect(data.right.x0, data.right.y0, data.right.width, data.right.height);
+    }
+    // Центральная часть стола
+    if(data.main.finish === data.main.checkP1 && data.main.checkP2 > data.main.x0) {
+        ctx.clearRect(data.right.x0, data.right.y0, data.right.height, data.right.width);
+        ctx.clearRect(data.mid.x0, data.mid.y0, data.mid.width, data.mid.height);
+
+        if (data.right.y0 !== data.main.checkP1 - 5) {
+            data.right.y0 -= 5; // Костыль, чтобы нормально стиралась нить
+        }
+
+        data.main.checkP2 -= 1;
+        data.right.x0 -= 1;
+
+        // Движение центрального блока
+        if(data.mid.x0 <= data.main.x0) {
+            if (data.mid.x0 !== data.main.x0 - 7) {
+                data.mid.x0 -= 7; // Костыль, чтобы нормально стиралась нить
+            }
+            data.mid.y0 += 1;
+
+            ctx.fillRect(data.mid.x0, data.mid.y0, data.mid.height, data.mid.width);
+        } else {
+            data.mid.x0 -= 1;
+
+            ctx.fillRect(data.mid.x0, data.mid.y0, data.mid.width, data.mid.height);
+        }
+
+        ctx.fillRect(data.right.x0, data.right.y0, data.right.height, data.right.width);
+    }
+
+    drawLine(data.main.checkP2, data.main.finish, data.main.checkP1, data.main.x0, data.left.y0);
 }
 
 function start() {
     if (getDir() === 'right') {
-        if(getPhase() === 3) {
-            if (data.main.y0 > data.main.checkP1) {
-                ctx.clearRect(data.left.x0, data.main.y0, data.left.width, data.left.height);
-                ctx.clearRect(data.mid.x0, data.mid.y0, data.mid.width, data.mid.height);
-                ctx.clearRect(data.right.x0, data.right.y0, data.right.width, data.right.height);
-
-                data.main.y0 -= 1;
-                data.left.y0 -= 1;
-
-                // Движение центрального блока
-                if (data.mid.x0 >= data.main.checkP2) {
-                    data.mid.y0 += 1;
-
-                    ctx.fillRect(data.mid.x0, data.mid.y0, data.mid.height, data.mid.width);
-                } else {
-                    data.mid.x0 += 1;
-
-                    ctx.fillRect(data.mid.x0, data.mid.y0, data.mid.width, data.mid.height);
-                }
-                // Движение правого блока
-                data.right.y0 += 1;
-                ctx.fillRect(data.right.x0, data.right.y0, data.right.width, data.right.height);
-
-                ctx.fillRect(data.left.x0, data.main.y0, data.left.width, data.left.height);
-            }
-            // Центральная часть стола
-            if (data.main.y0 === data.main.checkP1 && data.main.x0 < data.main.checkP2) {
-                ctx.clearRect(data.left.x0, data.left.y0, data.left.height, data.left.width);
-                ctx.clearRect(data.mid.x0, data.mid.y0, data.mid.width, data.mid.height);
-
-                if (data.left.y0 !== data.main.checkP1 - 5) {
-                    data.left.y0 -= 5; // Костыль, чтобы нормально стиралась нить
-                }
-
-                data.main.x0 += 1;
-                data.left.x0 += 1;
-
-                // Движение оранжевого блока
-                if (data.mid.x0 >= data.main.checkP2) {
-                    data.mid.y0 += 1;
-
-                    ctx.fillRect(data.mid.x0, data.mid.y0, data.mid.height, data.mid.width);
-                } else {
-                    data.mid.x0 += 1;
-
-                    ctx.fillRect(data.mid.x0, data.mid.y0, data.mid.width, data.mid.height);
-                }
-
-                ctx.fillRect(data.left.x0, data.left.y0, data.left.height, data.left.width);
-            }
-        }
+        moveRight();
+    } else {
+        moveLeft();
     }
-    drawLine(data.main.x0, data.main.y0, data.main.checkP1, data.main.checkP2, data.main.finish);
 }
 
 console.log(getPhase());
-setInterval(() => {
+let intervalID = setInterval(() => {
     start();
 }, getSpeed());
+
+setTimeout(() => {
+    clearInterval(intervalID);
+}, Math.floor(t) * 1000);
 console.log(getSpeed());
