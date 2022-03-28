@@ -12,8 +12,7 @@ let x = +document.querySelector("#x").textContent.replace(',', '.'),
     y2 = +document.querySelector("#y2").textContent.replace(',', '.');
 
 // t - время всего движения, с цифрами - время каждой фазы
-let t = +document.querySelector("#t").textContent.replace(',', '.'),
-    t1 = +document.querySelector("#t1").textContent.replace(',', '.'),
+let t1 = +document.querySelector("#t1").textContent.replace(',', '.'),
     t2 = +document.querySelector("#t2").textContent.replace(',', '.'),
     t3 = +document.querySelector("#t3").textContent.replace(',', '.');
 
@@ -104,33 +103,18 @@ function getPhase() {
     if (a3 && t3) {
         return 3;
     }
-    if (a2 && t2) {
-        return 2;
-    }
-    if (a1 && t1) {
-        return 1;
-    }
     if (!t1) {
         return 0;
     }
 }
 
 function getSpeed() {
+    if(getPhase() === 4) {
+        return a4 * 2;
+    }
     if(getPhase() === 3) {
         const v3 = Math.floor((a3 * t3) * 3);
         return v3;
-    }
-    if(getPhase() === 4) {
-        const v4 = Math.floor(a4 * 2.25);
-        return v4;
-    }
-    if(getPhase() === 2) {
-        const v2 = Math.floor((a2 * t2) * 80);
-        return v2;
-    }
-    if(getPhase() === 1) {
-        const v1 = Math.floor((a1 * t1) / 0.3);
-        return v1;
     }
     if(getPhase() === 0) {
         return 0;
@@ -166,6 +150,7 @@ function moveRight() {
     if (data.main.y0 === data.main.checkP1 && data.main.x0 < data.main.checkP2) {
         ctx.clearRect(data.left.x0, data.left.y0, data.left.height, data.left.width);
         ctx.clearRect(data.mid.x0, data.mid.y0, data.mid.width, data.mid.height);
+        ctx.clearRect(data.right.x0, data.right.y0, data.right.width, data.right.height);
 
         if (data.left.y0 !== data.main.checkP1 - 5) {
             data.left.y0 -= 5; // Костыль, чтобы нормально стиралась нить
@@ -175,7 +160,10 @@ function moveRight() {
         data.left.x0 += 1;
 
         // Движение центрального блока
-        if (data.mid.x0 >= data.main.checkP2) {
+        if (data.mid.x0 >= data.main.checkP2 - 7) {
+            if(data.mid.x0 !== data.main.checkP2 - 7) {
+                data.mid.x0 -= 7;
+            }
             data.mid.y0 += 1;
 
             ctx.fillRect(data.mid.x0, data.mid.y0, data.mid.height, data.mid.width);
@@ -186,6 +174,9 @@ function moveRight() {
         }
 
         ctx.fillRect(data.left.x0, data.left.y0, data.left.height, data.left.width);
+
+        data.right.y0 += 1;
+        ctx.fillRect(data.right.x0, data.right.y0, data.right.width, data.right.height);
     }
     drawLine(data.main.x0, data.main.y0, data.main.checkP1, data.main.checkP2, data.right.y0);
 }
@@ -219,6 +210,7 @@ function moveLeft() {
     if(data.main.finish === data.main.checkP1 && data.main.checkP2 > data.main.x0) {
         ctx.clearRect(data.right.x0, data.right.y0, data.right.height, data.right.width);
         ctx.clearRect(data.mid.x0, data.mid.y0, data.mid.width, data.mid.height);
+        ctx.clearRect(data.left.x0, data.left.y0, data.left.width, data.left.height);
 
         if (data.right.y0 !== data.main.checkP1 - 5) {
             data.right.y0 -= 5; // Костыль, чтобы нормально стиралась нить
@@ -242,6 +234,11 @@ function moveLeft() {
         }
 
         ctx.fillRect(data.right.x0, data.right.y0, data.right.height, data.right.width);
+
+        data.left.y0 += 1;
+        ctx.fillRect(data.left.x0, data.left.y0, data.left.width, data.left.height);
+
+        ctx.fillRect(data.right.x0, data.right.y0, data.right.width, data.right.height);
     }
 
     drawLine(data.main.checkP2, data.main.finish, data.main.checkP1, data.main.x0, data.left.y0);
@@ -255,12 +252,10 @@ function start() {
     }
 }
 
-console.log(getPhase());
-let intervalID = setInterval(() => {
+if(getSpeed() === 0) {
     start();
-}, getSpeed());
-
-setTimeout(() => {
-    clearInterval(intervalID);
-}, Math.floor(t) * 1000);
-console.log(getSpeed());
+} else {
+    setInterval(() => {
+        start()
+    }, getSpeed());
+}
