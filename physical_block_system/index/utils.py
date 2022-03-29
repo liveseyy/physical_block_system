@@ -31,10 +31,6 @@ def caclculate_blocks(cleaned_date: dict):
     m = cleaned_date.get('m')
     m1 = cleaned_date.get('m1')
     m2 = cleaned_date.get('m2')
-    t = cleaned_date.get('t')
-    t1 = None
-    t2 = None
-    t3 = None
 
     reversed_masses = False
     if m2 < m1:
@@ -52,9 +48,6 @@ def caclculate_blocks(cleaned_date: dict):
     y0_2 = -1 * (l2 - S_TABLE / 2 + l)
 
     a1 = g * (m2 - m1 - k * m) / (m + m2 + m1)
-    a2 = None
-    a3 = None
-    a4 = None
     if a1 < 0 or m2 == m1:
         return {
             'result_text': "В начальном положении",
@@ -71,63 +64,24 @@ def caclculate_blocks(cleaned_date: dict):
     if True:
         # легкое тело окажется в (0, 0) через
         t1 = math.sqrt(2 * (l1 - S_TABLE / 2 + l) / a1)
-        # До истечения t1
-        if t <= t1:
-            # тело проедет не t1 секунд, а за остаток от заданого t
-            t1 = t
-            y1 = y0_1 + a1 * t1 ** 2 / 2
-            x1 = x0_1 = 0
-            y2 = y0_2 - a1 * t1 ** 2 / 2
-            x2 = x0_2 = S_TABLE
-            y = y0 = 0
-            x = x0 + a1 * t1 ** 2 / 2
+        # После истечения t1
+        # 3 страница решения
+        a2 = (m2 * g - k * g * (m1 + m)) / (m + m1 + m2)
+        t2 = _calculate_t2(S_TABLE=S_TABLE, l1=l1, l=l, a1=a1, a2=a2, t1=t1)
 
-            result_text = 'Меньшее тело остановится до блока'
-        else:
-            # После истечения t1
-            # 3 страница решения
-            a2 = (m2 * g - k * g * (m1 + m)) / (m + m1 + m2)
-            t2 = _calculate_t2(S_TABLE=S_TABLE, l1=l1, l=l, a1=a1, a2=a2, t1=t1)
-            # До истечения t2
-            if t - t1 - t2 < 0:
-                # тело проедет не t2 секунд, а за остаток от заданого t
-                # 4 страница решения
-                t2 = t - t1
-                y1 = 0
-                x1 = a1 * t1 + a2 * t2 ** 2
-                y2 = -a1 * t1 + S_TABLE - 2 * l - l2 - l1 - (a2 * t2 ** 2) / 2
-                x2 = S_TABLE
-                y = 0
-                x = l1 + l + a1 * t1 + (a2 * t2 ** 2) / 2
+        # 5 страница решения
+        a3 = g * (m2 + m - k * m1) / (m1+m2+m)
+        t3 = _calculate_t3(l1=l1, l=l, a1=a1, a2=a2, a3=a3, t1=t1, t2=t2)
 
-                result_text = 'Меньшее тело остановится после блока, но до следующего блока'
-            else:
-                # После истечения t2
-                # 5 страница решения
-                a3 = g * (m2 + m - k * m1) / (m1+m2+m)
+        # все тела летят вниз, a4 = g = 9,8
+        a4 = g * (m + m1 + m2) / (m + m1 + m2)
 
-                t3 = _calculate_t3(l1=l1, l=l, a1=a1, a2=a2, a3=a3, t1=t1, t2=t2)
-                if t - t1 - t2 - t3 < 0:
-                    # До истечения t1
-                    t3 = t - t1 - t2
-                    y1 = 0
-                    x1 = (a1*t1 + a2*t2) * t3 + S_TABLE - l1 - l + a3*t3**2/2
-                    y2 = (-l2 - l) - (a1*t1 + a2*t2) * t3 - a3*t3**2/2
-                    x2 = S_TABLE
-                    y = -(a1*t1 + a2*t2) * t3 - a3*t3**2/2
-                    x = S_TABLE
-                    result_text = 'Одно тело останется на столе, двое повиснут'
-                else:
-                    # все тела летят вниз, a4 = g = 9,8
-                    a4 = g * (m + m1 + m2) / (m + m1 + m2)
-
-                    y1 = 0
-                    x1 = S_TABLE
-                    y2 = -l2 - l1 - S_TABLE
-                    x2 = S_TABLE
-                    y = l1 + l - 2 * S_TABLE
-                    x = S_TABLE
-                    result_text = 'Тяжелое тело унесёт два других'
+        y1 = 0
+        x1 = S_TABLE
+        y2 = -l2 - l1 - S_TABLE
+        x2 = S_TABLE
+        y = l1 + l - 2 * S_TABLE
+        x = S_TABLE
 
     if reversed_masses:
         m1, m2 = m2, m1
@@ -137,7 +91,7 @@ def caclculate_blocks(cleaned_date: dict):
         # "y" менять не нужно, т.к. все случаи зеркальны по y оси
 
     return {
-        'result_text': result_text,
+        'result_text': "Тяжелое тяло перевесит",
         'y1': y1,
         'x1': x1,
         'y2': y2,
@@ -151,7 +105,6 @@ def caclculate_blocks(cleaned_date: dict):
         't1': t1,
         't2': t2,
         't3': t3,
-        't': t,
         'm1': m1,
         'm2': m2,
         'm': m
